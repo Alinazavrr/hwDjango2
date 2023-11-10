@@ -1,0 +1,22 @@
+{% extends 'layouts/navbar.html' %}
+{% load bootstrap4 %}
+
+{% block title %}List of Tasks{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% for ad in ads %}
+            <div class="card mb-4" style="width: 18rem;">
+                <div class="card-header">
+                    <img src="{{ ad.img.url }}" class="card-img-top" alt="...">
+                    <h4 class="card-title"><a href="{% url 'ad_detail' pk=ad.pk %}">{{ ad.title }}</a></h4>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Description: {{ ad.info }}</p>
+                    <a href="{% url 'ad_update' pk=ad.pk %}" class="btn btn-warning">Update Advertistment</a>
+                    <a href="{% url 'ad_delete' pk=ad.pk %}" class="btn btn-danger">Delete Advertistment</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

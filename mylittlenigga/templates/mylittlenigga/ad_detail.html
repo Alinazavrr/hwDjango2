@@ -1,0 +1,15 @@
+{% extends 'layouts/navbar.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Task Detail{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ ad.title }}</h1>
+                <p class="card-text">Info: {{ ad.info }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
