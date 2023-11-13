@@ -1,4 +1,5 @@
 {% load bootstrap4 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,11 +14,24 @@
         <header class="d-flex justify-content-center py-3">
             <ul class="nav nav-pills">
                 <li class="nav-item pr-3">
-                    <a href="{% url 'task_list' %}" class="nav-link active", aria-current="page">List of Tasks</a>
+                    <a href="{% url 'ad_list' %}" class="nav-link active", aria-current="page">List of Tasks</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'task_create' %}" class="nav-link active">Create a Task</a>
+                    <a href="{% url 'ad_create' %}" class="nav-link active">Create a Task</a>
                 </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user_register' %}">Registration</a>
+                    </li>
+                {% endif %}
             </ul>
         </header>
     </div>

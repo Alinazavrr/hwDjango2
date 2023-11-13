@@ -13,8 +13,8 @@
                 </div>
                 <div class="card-body">
                     <p class="card-text">Description: {{ ad.info }}</p>
-                    <a href="{% url 'ad_update' pk=ad.pk %}" class="btn btn-warning">Update Advertistment</a>
-                    <a href="{% url 'ad_delete' pk=ad.pk %}" class="btn btn-danger">Delete Advertistment</a>
+                    <a href="{% url 'ad_update' pk=ad.pk %}" class="btn btn-warning mt-3">Update Advertistment</a>
+                    <a href="{% url 'ad_delete' pk=ad.pk %}" class="btn btn-danger mt-1">Delete Advertistment</a>
                 </div>
             </div>
         {% endfor %}

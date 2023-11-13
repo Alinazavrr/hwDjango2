@@ -1,4 +1,7 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView, LogoutView
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 
@@ -6,10 +9,45 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 
-from django.utils import timezone
+from django.contrib.auth.forms import AuthenticationForm
 # Create your views here.
-from .forms import AdForm, Comment
+from .forms import AdForm, Comment, SignUpForm
 from .models import Ad, Comment
+from django.core.signing import Signer
+
+
+def check(request):
+    username = request.kwargs['username']
+    if request.user.is_authenticated:
+        return HttpResponse(status=404)
+    try:
+        checked_name = Signer.unsign(username)
+        user = get_object_or_404(User, username=checked_name)
+        user.is_active, user.is_activated = True, True
+        user.save()
+        return HttpResponse('U hgay')
+    except:
+        return HttpResponse(status=404)
+
+
+class SignUpView(CreateView):
+    form_class = SignUpForm
+    success_url = reverse_lazy('ad_list')
+    template_name = 'accounts/signup.html'
+
+class UserLoginView(LoginView):
+    template_name = 'accounts/login.html'
+    redirect_field_name = 'next'
+    authentication_form = AuthenticationForm
+
+class UserLogoutView(LogoutView):
+    template_name = 'accounts/logout.html'
+    redirect_field_name = 'next'
+
+
+
+
+
 
 class AdList(ListView):
     """
@@ -48,9 +86,10 @@ class AdUpdate(UserPassesTestMixin, UpdateView):
     model = Ad
     template_name = 'mylittlenigga/form.html'
     fields = ['title', 'info', 'img']
+    success_url = '/ad/{id}'
 
     def test_func(self):
-        user = self.request.author
+        user = self.request.user
         object = self.get_object().author
         return user == object
 
@@ -71,7 +110,7 @@ class AdDelete(UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('')
 
     def test_func(self):
-        user = self.request.author
+        user = self.request.user
         object = self.get_object().author
         return user == object
 
