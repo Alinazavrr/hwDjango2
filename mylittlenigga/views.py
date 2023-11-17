@@ -16,18 +16,23 @@ from .models import Ad, Comment
 from django.core.signing import Signer
 
 
-def check(request):
-    username = request.kwargs['username']
+def check(request, username):
     if request.user.is_authenticated:
         return HttpResponse(status=404)
     try:
-        checked_name = Signer.unsign(username)
+        signer = Signer()
+        checked_name = signer.unsign(username)
         user = get_object_or_404(User, username=checked_name)
-        user.is_active, user.is_activated = True, True
+        print(user.username)
+        if user.is_active:
+            return HttpResponse('U already activated')
+        user.is_active = True
         user.save()
+        print('user')
         return HttpResponse('U hgay')
-    except:
-        return HttpResponse(status=404)
+    except Exception as e:
+        print(e)
+        return HttpResponse(status=400)
 
 
 class SignUpView(CreateView):
