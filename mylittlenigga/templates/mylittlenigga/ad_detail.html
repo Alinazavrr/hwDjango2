@@ -11,5 +11,13 @@
                 <p class="card-text">Info: {{ ad.info }}</p>
             </div>
         </div>
+        <a href="{% url 'comment_create' pk=ad.pk %}" class="btn btn-submit mt-3"> Comment </a>
+        {% for comment in ad.comment_set.all %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p class="card-text">Comment: {{ comment.text }}</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

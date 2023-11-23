@@ -11,7 +11,7 @@ from django.views.generic.detail import DetailView
 
 from django.contrib.auth.forms import AuthenticationForm
 # Create your views here.
-from .forms import AdForm, Comment, SignUpForm
+from .forms import AdForm, Comment, SignUpForm, CommentForm
 from .models import Ad, Comment
 from django.core.signing import Signer
 
@@ -43,6 +43,7 @@ class SignUpView(CreateView):
 class UserLoginView(LoginView):
     template_name = 'accounts/login.html'
     redirect_field_name = 'next'
+    next_page = reverse_lazy('ad_list')
     authentication_form = AuthenticationForm
 
 class UserLogoutView(LogoutView):
@@ -126,10 +127,10 @@ class CommentCreate(CreateView):
     Create ad model
     """
     model = Comment
-    form_class = Comment
+    form_class = CommentForm
     template_name = 'mylittlenigga/form.html'
-    success_url = ''
+    success_url = '/ad/{id}'
 
     def form_valid(self, form):
-        form.instance.ad = get_object_or_404(Ad, pk=self.kwargs['pk'])
-        return super().form_valid(form)
+        form.instance.ad = get_object_or_404(Ad, pk=self.kwargs['pk']) #Bh1
+        return super().form_valid(form) #Ka1
